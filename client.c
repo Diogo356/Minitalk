@@ -6,11 +6,13 @@
 /*   By: dbelarmi <dbelarmi@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 08:18:15 by dbelarmi          #+#    #+#             */
-/*   Updated: 2023/03/26 22:25:53 by dbelarmi         ###   ########.fr       */
+/*   Updated: 2023/04/03 21:53:24 by dbelarmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+int  kill_status = 0;
 
 void print_error(char *message)
 {
@@ -35,7 +37,7 @@ void validate_inputs(int argc, char **argv)
             print_error("Error: PID Invalid (PID is not a digit)\n");
         else if(pid <= 0)
             print_error("Error: PID Invalid (PID too small)\n/"
-            "PID 0 is reserved by the system \n");
+            "PID 0 is reserved by the kernel\n");
         else if (aux > 7)
             print_error("Error: PID Invalid (PID too big)\n");
         i++;
@@ -43,19 +45,38 @@ void validate_inputs(int argc, char **argv)
     
 }
 
-//void message_transmit(pid_t pid, char *message)
-//{
+void message_transmit(pid_t pid, char *message)
+{
+    int i;
+    int count_bits;
     
-//}
+    i = 0;
+    while (message[i] != '\0')
+    {
+        count_bits = 0;
+        while (count_bits < 8)
+        {
+            if((message[i] >> count_bits) & 0b00000001)
+                kill_status = kill(pid, SIGUSR1);
+            else
+                kill_status = kill(pid, SIGUSR2);
+            if(kill_status == -1)
+                print_error("ERROR: Kill.\n");
+            count_bits++;
+            usleep(500);
+        }
+        i++;
+    }
+}
 
 int main(int argc, char **argv)
 {
-   // pid_t pid;
-    //char *message;
+    pid_t pid;
+    char *message;
 
     validate_inputs(argc, argv);
-    //pid = ft_atoi(argv[1]);
-    //message = argv[2];
-    //message_transmit(pid, message);
+    pid = ft_atoi(argv[1]);
+    message = argv[2];
+    message_transmit(pid, message);
     return (0);
 }
