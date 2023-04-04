@@ -6,13 +6,13 @@
 /*   By: dbelarmi <dbelarmi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 08:18:15 by dbelarmi          #+#    #+#             */
-/*   Updated: 2023/04/04 13:29:14 by dbelarmi         ###   ########.fr       */
+/*   Updated: 2023/04/04 18:38:20 by dbelarmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	print_error(char *message)
+static void	p_error_c(char *message)
 {
 	ft_putstr(message);
 	exit(EXIT_FAILURE);
@@ -26,18 +26,18 @@ void	validate_inputs(int argc, char **argv)
 
 	i = 0;
 	if (argc != 3)
-		print_error("Usage: ./client <PID> <Message>\n");
+		p_error_c("Usage: ./client <PID> <Message>\n");
 	aux = ft_strlen(argv[1]);
 	pid = ft_atoi(argv[1]);
 	while (argv[1][i])
 	{
 		if (!ft_isdigit(argv[1][i]))
-			print_error("Error: PID Invalid (PID is not a digit)\n");
+			p_error_c("Error: PID Invalid (PID is not a digit)\n");
 		else if (pid <= 0)
-			print_error("Error: PID Invalid (PID too small)\n" \
+			p_error_c("Error: PID Invalid (PID too small)\n" \
 			"PID 0 is reserved by the kernel\n");
 		else if (aux > 7)
-			print_error("Error: PID Invalid (PID too big)\n");
+			p_error_c("Error: PID Invalid (PID too big)\n");
 		i++;
 	}
 }
@@ -46,7 +46,7 @@ void	message_transmit(pid_t pid, char *message)
 {
 	int	i;
 	int	count_bits;
-    int	kill_status;
+	int	kill_status;
 
 	i = 0;
 	while (message[i] != '\0')
@@ -59,18 +59,18 @@ void	message_transmit(pid_t pid, char *message)
 			else
 				kill_status = kill(pid, SIGUSR2);
 			if (kill_status == -1)
-				print_error("ERROR: Kill.\n");
+				p_error_c("ERROR: Kill.\n");
 			count_bits++;
-			usleep(500);
+			usleep(5000);
 		}
 		i++;
 	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	pid_t	pid;
-    char	*message;
+	char	*message;
 
 	validate_inputs(argc, argv);
 	pid = ft_atoi(argv[1]);
