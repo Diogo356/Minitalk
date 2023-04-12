@@ -6,7 +6,7 @@
 /*   By: dbelarmi <dbelarmi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 08:18:15 by dbelarmi          #+#    #+#             */
-/*   Updated: 2023/04/04 18:38:20 by dbelarmi         ###   ########.fr       */
+/*   Updated: 2023/04/10 14:35:40 by dbelarmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	message_transmit(pid_t pid, char *message)
 			if (kill_status == -1)
 				p_error_c("ERROR: Kill.\n");
 			count_bits++;
-			usleep(5000);
+			usleep(500);
 		}
 		i++;
 	}

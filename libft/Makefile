@@ -6,13 +6,13 @@
 #    By: dbelarmi <dbelarmi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/28 20:42:22 by dbelarmi          #+#    #+#              #
-#    Updated: 2023/04/04 13:16:44 by dbelarmi         ###   ########.fr        #
+#    Updated: 2023/04/11 20:31:28 by dbelarmi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= libft.a 
 
-SRCS	= ft_strlen.c ft_isdigit.c ft_atoi.c ft_putchar.c ft_putstr.c 
+SRCS	= ft_strlen.c ft_isdigit.c ft_atoi.c ft_putchar.c ft_putstr.c ft_putnbr.c
 
 OBJS	= ${SRCS:.c=.o} 
 

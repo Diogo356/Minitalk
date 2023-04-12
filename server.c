@@ -6,54 +6,51 @@
 /*   By: dbelarmi <dbelarmi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 18:02:02 by dbelarmi          #+#    #+#             */
-/*   Updated: 2023/04/04 18:44:09 by dbelarmi         ###   ########.fr       */
+/*   Updated: 2023/04/11 20:32:17 by dbelarmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-#define SEGMENT_SIZE 8
+t_char	g_char;
 
-static void	p_error_s(char *message)
+void	init_char(void)
 {
-	ft_putstr(message);
-	exit(EXIT_FAILURE);
+	g_char.bits_shifted_counter = 0;
+	g_char.assembled_char = '\0';
 }
 
-static void	receive_message(int signal, siginfo_t *info, void *ucontext)
+void	print_pid(void)
 {
-	static int	shift_bits;
-	static char	letter;
+	ft_putnbr(getpid());
+	ft_putchar('\n');
+}
 
-	(void)ucontext;
+void	print_character(int signal)
+{
 	if (signal == SIGUSR1)
-		letter += (0b00000001 << shift_bits);
-	if (shift_bits == 7)
+		g_char.assembled_char += (0b00000001 << g_char.bits_shifted_counter);
+	if (g_char.bits_shifted_counter == 7)
 	{
-		if (letter)
-			ft_putchar_fd(letter);
-		else
-		{
-			if (kill(info->si_pid, SIGUSR2))
-				p_error_s("Failed to send signal");
-		}	
-		letter = 0;
-		shift_bits = 0;
+		ft_putchar(g_char.assembled_char);
+		init_char();
+		return ;
 	}
-	else
-		shift_bits++;
-	if (kill(info->si_pid, SIGUSR1))
-		p_error_s("Failed to send signal");
+	g_char.bits_shifted_counter++;
 }
 
-int main(void) {
-    struct sigaction action;
-    action.sa_sigaction = receive_message;
-    action.sa_flags = SA_SIGINFO;
-    if (sigaction(SIGUSR1, &action, NULL) == -1 || sigaction(SIGUSR2, &action, NULL) == -1)
-        p_error_s("sigaction");
-    printf("Listening for messages...%d\n", (int)getpid());
-    while (1)
-        pause();
-    return EXIT_SUCCESS;
+void	send_signals(void)
+{
+	signal(SIGUSR1, print_character);
+	signal(SIGUSR2, print_character);
+	while (1)
+		pause();
+}
+
+int	main(void)
+{
+	init_char();
+	print_pid();
+	send_signals();
+	return (0);
 }
