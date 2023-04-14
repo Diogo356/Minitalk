@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbelarmi <dbelarmi@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: dbelarmi <dbelarmi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 08:18:15 by dbelarmi          #+#    #+#             */
-/*   Updated: 2023/04/14 01:57:32 by dbelarmi         ###   ########.fr       */
+/*   Updated: 2023/04/14 15:07:17 by dbelarmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,15 @@ void	message_transmit(int pid, char *message)
 			if (kill_status == -1)
 				error("ERROR: Kill.\n");
 			count_bits++;
-			usleep(500);
+			usleep(5000);
 		}
 		i++;
 	}
+}
+
+void	received_message(int signal)
+{
+	(void)signal;
 }
 
 int	main(int argc, char **argv)
@@ -75,6 +80,9 @@ int	main(int argc, char **argv)
 	validate_inputs(argc, argv);
 	pid = ft_atoi(argv[1]);
 	message = argv[2];
+	signal(SIGUSR1, received_message);
+	signal(SIGUSR2, received_message);
 	message_transmit(pid, message);
+	message_transmit(pid, "\n");
 	return (0);
 }
