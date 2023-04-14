@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbelarmi <dbelarmi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbelarmi <dbelarmi@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 22:17:49 by dbelarmi          #+#    #+#             */
-/*   Updated: 2023/04/11 20:31:51 by dbelarmi         ###   ########.fr       */
+/*   Updated: 2023/04/14 00:57:45 by dbelarmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	message_transmit(pid_t pid, char *message);
 
 typedef struct s_char
 {
-	int		bits_shifted_counter;
-	char	assembled_char;
+	int		bits_counter;
+	char	received_char;
 }			t_char;
 
 #endif
